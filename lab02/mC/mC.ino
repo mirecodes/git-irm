@@ -60,6 +60,6 @@ void loop()
     }
 
     // use delayMicroseconds to change the frequency of your output
-    delayMicroseconds(0);
+    delayMicroseconds(1000);
   }
 }
