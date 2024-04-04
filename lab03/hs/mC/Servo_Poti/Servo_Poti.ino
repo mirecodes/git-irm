@@ -47,5 +47,5 @@ void loop() {
   
   // _______________ End - Loop _______________
   
-  delay(15); // wait for the servo to get there
+  delay(200); // wait for the servo to get there
 }
