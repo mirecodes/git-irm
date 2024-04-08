@@ -33,7 +33,7 @@ void loop() {
   // Read values from the analog pin and map/scale them to the movment range of the servo.
   int potential = analogRead(POTI);
 
-  int pwm_microsec = map(potential, 0, 4095, 550, 2400);
+  int pwm_microsec = map(potential, 0, 4095, 550, 2276);
 
   Serial.print("poential: ");
   Serial.print(potential);
