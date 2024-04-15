@@ -74,6 +74,13 @@ void loop() {
   //----- Prelab 2 ----------
   //-------------------------
 
+  //-------------------------
+
+  //-------------------------
+  //----- Postlab 2 ----------
+  //-------------------------
+
+  // Write your code snippet here to read in 20 consecutive values
   if( Serial.available())
   {
     // read the incoming character and save it in "serialVariable"
@@ -85,34 +92,37 @@ void loop() {
       return;
     }
 
-    else if (incoming == 'r') {
-      sum = 0;
-      for (int i=0; i<20; i++) {
-        incoming_Hall = analogRead(hall_pin);
-        sum += incoming_Hall;
-        delay(10);
-      }
-      hall_Mean = sum / 20;
-      // analogRead: for ArduinoUNO, from 0 to 1023 (0-5 V)
-      // analogRead: for ESP32 Feather, from 0 to 4095 (0-3.3 V)
-      Serial.println(incoming_Hall);
-    }
-
-    else if (incoming == 'c') {
+    else if (incoming == 'a') {
       incoming_Hall = analogRead(hall_pin);
       // analogRead: for ArduinoUNO, from 0 to 1023 (0-5 V)
       // analogRead: for ESP32 Feather, from 0 to 4095 (0-3.3 V)
       Serial.println(incoming_Hall);
     }
+
+    else if (incoming == 'b') {
+      sum = 0;
+      for (int i=0; i<20; i++) {
+        incoming_Hall = analogRead(hall_pin);
+        sum += incoming_Hall;
+      }
+      hall_Mean = sum / 20;
+      // analogRead: for ArduinoUNO, from 0 to 1023 (0-5 V)
+      // analogRead: for ESP32 Feather, from 0 to 4095 (0-3.3 V)
+      Serial.println(hall_Mean);
+    }
+
+    else if (incoming == 'c') {
+      sum = 0;
+      for (int i=0; i<200; i++) {
+        incoming_Hall = analogRead(hall_pin);
+        sum += incoming_Hall;
+      }
+      hall_Mean = sum / 200;
+      // analogRead: for ArduinoUNO, from 0 to 1023 (0-5 V)
+      // analogRead: for ESP32 Feather, from 0 to 4095 (0-3.3 V)
+      Serial.println(hall_Mean);
+    }
   }
-
-  //-------------------------
-
-  //-------------------------
-  //----- Postlab 2 ----------
-  //-------------------------
-
-  // Write your code snippet here to read in 20 consecutive values
 
   //-------------------------
 
