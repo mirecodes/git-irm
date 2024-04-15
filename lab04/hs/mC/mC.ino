@@ -74,12 +74,39 @@ void loop() {
   //----- Prelab 2 ----------
   //-------------------------
 
-  // Write your code here
+  if( Serial.available())
+  {
+    // read the incoming character and save it in "serialVariable"
+    char incoming = Serial.read();
+
+    // If "q" is received, quit the loop
+    if (incoming == 'q') {
+      Serial.println("Terminate the process");
+      return;
+    }
+
+    else if (incoming == 'r') {
+      sum = 0;
+      for (int i=0; i<20; i++) {
+        incoming_Hall = analogRead(hall_pin);
+        sum += incoming_Hall;
+        delay(10);
+      }
+      hall_Mean = sum / 20;
+      // analogRead: for ArduinoUNO, from 0 to 1023 (0-5 V)
+      // analogRead: for ESP32 Feather, from 0 to 4095 (0-3.3 V)
+      Serial.println(incoming_Hall);
+    }
+
+    else if (incoming == 'c') {
+      incoming_Hall = analogRead(hall_pin);
+      // analogRead: for ArduinoUNO, from 0 to 1023 (0-5 V)
+      // analogRead: for ESP32 Feather, from 0 to 4095 (0-3.3 V)
+      Serial.println(incoming_Hall);
+    }
+  }
 
   //-------------------------
-
-
-
 
   //-------------------------
   //----- Postlab 2 ----------
