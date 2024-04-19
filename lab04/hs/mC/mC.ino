@@ -18,7 +18,7 @@ uint32_t sum;             // Store the sum of the sensor voltages
 uint16_t hall_Mean;       // Store the average of the sensor voltages
 
 float position = 0.0;       // Magnet position in mm
-float position_calib = 15.0;  // Starting postition after calibration (Change if needed)
+float position_calib = 18.0;  // Starting postition after calibration (Change if needed)
 
 // Interrupt variables
 unsigned long last_pressed = 0;   // Store time when button has last been pressed
@@ -70,21 +70,15 @@ void loop() {
   }
   // ------------------------------------------------------- 
 
-  //-------------------------
-  //----- Prelab 2 ----------
-  //-------------------------
-
-  //-------------------------
-
-  //-------------------------
-  //----- Postlab 2 ----------
-  //-------------------------
-
   // Write your code snippet here to read in 20 consecutive values
   if( Serial.available())
   {
     // read the incoming character and save it in "serialVariable"
     char incoming = Serial.read();
+
+    //-------------------------
+    //----- Prelab 2 ----------
+    //-------------------------
 
     // If "q" is received, quit the loop
     if (incoming == 'q') {
@@ -92,6 +86,23 @@ void loop() {
       return;
     }
 
+    else if (incoming == 'r') {
+      sum = 0;
+      for (int i=0; i<20; i++) {
+        incoming_Hall = analogRead(hall_pin);
+        sum += incoming_Hall;
+      }
+      hall_Mean = sum / 20;
+      // analogRead: for ArduinoUNO, from 0 to 1023 (0-5 V)
+      // analogRead: for ESP32 Feather, from 0 to 4095 (0-3.3 V)
+      Serial.println(hall_Mean);
+    }
+
+    //-------------------------
+
+    //-------------------------
+    //----- Postlab 2 ----------
+    //-------------------------
     else if (incoming == 'a') {
       incoming_Hall = analogRead(hall_pin);
       // analogRead: for ArduinoUNO, from 0 to 1023 (0-5 V)
@@ -122,19 +133,34 @@ void loop() {
       // analogRead: for ESP32 Feather, from 0 to 4095 (0-3.3 V)
       Serial.println(hall_Mean);
     }
+  
+
+    //-------------------------
+
+
+
+    //-------------------------
+    //----- Postlab 3 ----------
+    //-------------------------
+
+    // Write your code here to call the motor movement functions depending on the input
+    else if (incoming == '0') {
+      calibrate();
+    }
+
+    else if (incoming == '1') {
+      move(1);
+    }
+
+    else if (incoming == 'p') {
+      Serial.println(position);
+    }
+
+    //-------------------------
+    else {
+
+    }
   }
-
-  //-------------------------
-
-
-
-  //-------------------------
-  //----- Postlab 3 ----------
-  //-------------------------
-
-  // Write your code here to call the motor movement functions depending on the input
-
-  //-------------------------
 
 }
 
@@ -146,23 +172,34 @@ void loop() {
 // This function will move the stage until it reaches the safety switch, trigger the crash() function and then move back to the starting position of 20mm
 
 void calibrate(){
-  //Serial.println("Calibration");
+  // Serial.println("Calibration");
   while(!interrupt_Flag){                 // As long as the safety switch is not pressed (the interrupt flag is not TRUE) move the magnet forward
     myMotor->step(1, FORWARD, DOUBLE);
   }
-  myMotor->step(100, BACKWARD, DOUBLE);   // After the button is detected, move 200 steps back (2mm)
+  myMotor->step(150, BACKWARD, DOUBLE);   // After the button is detected, move 150 steps back (1.5mm)
   myMotor->release();                     // Release the motor after moving so it does not use current and heat up
   position = position_calib;              // Update the postition to the starting position. Position_calib may vary depending on the setup, feel free to change it to its correct value
   Serial.print(1);                        // Send back the character "1" to let the C-Code know, that the calibration is complete
 }
        
-
-
 // ---------------------------------------------------
 // ----------------- Postlab Q3 ----------------------
 // ---------------------------------------------------
 
 //        ----- Write your function(s) here -----
+void move(int millimeters) {
+  float desired_position = position + millimeters;
+
+  if (desired_position > 85.0) {
+    printf("[warning] the desired position is out of boundary");
+    return;
+  }
+
+  myMotor->step(100, BACKWARD, DOUBLE);
+  myMotor->release();
+  position += millimeters;
+  Serial.print(2); //                      // Send back the character "2" to let the C-Code know, that the calibration is complete
+}
 
 // ---------------------------------------------------
 // ---------------------------------------------------
