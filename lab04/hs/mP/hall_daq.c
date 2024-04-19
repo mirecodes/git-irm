@@ -62,9 +62,9 @@ int main(int argc, const char * argv[])
     // Initialize Variation
     int start_pos = 18;
     int cur_pos = start_pos;
-    int max_pos = 55;
+    int lim_pos = 56;
 
-    float voltage_q = 1.542;
+    float voltage_q = 1.529;
     float B = 0.0;
 
     float mC_pos = 0.0;
@@ -83,19 +83,11 @@ int main(int argc, const char * argv[])
     } while (output != 1);
 
     // Start movement
-    while (cur_pos < max_pos) {
+    while (cur_pos < lim_pos) {
 
       res = serialport_writebyte(fd, "1");
       // Let the user know if you were able to write to the port
       if (res == -1) printf("[Error] Unable to write the port \n");
-
-      // Wait until mC complete the movement
-      do {
-        res = serialport_read(fd, string_buffer, 100, 10);
-        output = atoi(string_buffer);
-      } while (output != 2);
-
-      cur_pos += 1;
 
       // Read the values
 
@@ -130,6 +122,15 @@ int main(int argc, const char * argv[])
       // Print the magnetic field (and the position) to the terminal (or .txt file)
       fprintf(stderr, "(distance [mm]) - (Magnetic Field [mT]): %f - %f\n", mC_pos, B);
       fprintf(stdout, "%f - %f\n", mC_pos, B);
+
+      // Wait until mC complete the movement
+      do {
+        res = serialport_read(fd, string_buffer, 100, 10);
+        output = atoi(string_buffer);
+      } while (output != 2);
+
+      cur_pos += 1;
+
     }
   }
 
