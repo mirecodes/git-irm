@@ -32,6 +32,7 @@ int main(int argc, const char * argv[])
 
   scanf("%d", &opr_mode);
 
+  // select opr mode for task 2
   if (opr_mode == 2) {
     for (int i=0; i<50; i++) {
     // Write to the serial port to get a value (or to move the magnet according to the .ino file) 
@@ -58,6 +59,7 @@ int main(int argc, const char * argv[])
     }
   }
 
+  // select opr mode for task 3
   else if (opr_mode == 3) {
     // Initialize Variation
     int start_pos = 18;
@@ -85,17 +87,10 @@ int main(int argc, const char * argv[])
     // Start movement
     while (cur_pos < lim_pos) {
 
-      res = serialport_writebyte(fd, "1");
-      // Let the user know if you were able to write to the port
-      if (res == -1) printf("[Error] Unable to write the port \n");
-
-      // Read the values
-
       // Write port to get the voltage value
       res = serialport_writebyte(fd, "b");
       // Let the user know if you were able to write to the port
       if (res == -1) printf("#[Error] Unable to write the port \n");
-
       // Read the voltage value
       res = serialport_read(fd, string_buffer, 100, 50);
       // Let the user know if you were able to read from the port
@@ -108,7 +103,6 @@ int main(int argc, const char * argv[])
       res = serialport_writebyte(fd, "p");
       // Let the user know if you were able to write to the port
       if (res == -1) printf("#[Error] Unable to write the port \n");
-
       // Read the position value
       res = serialport_read(fd, string_buffer, 100, 50);
       // Let the user know if you were able to read from the port
@@ -122,6 +116,11 @@ int main(int argc, const char * argv[])
       // Print the magnetic field (and the position) to the terminal (or .txt file)
       fprintf(stderr, "(distance [mm]) - (Magnetic Field [mT]): %f - %f\n", mC_pos, B);
       fprintf(stdout, "%f - %f\n", mC_pos, B);
+
+      // Write mC to move the position
+      res = serialport_writebyte(fd, "1");
+      // Let the user know if you were able to write to the port
+      if (res == -1) printf("[Error] Unable to write the port \n");
 
       // Wait until mC complete the movement
       do {
