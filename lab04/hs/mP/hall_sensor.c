@@ -11,5 +11,8 @@ float hall_sensor_get_field(float voltage, float voltage_0)
    float sensitivity = sensitivity_25*(1+stc*(temperature-25));
    float B = (voltage - voltage_0) / sensitivity * 1000; // unit: [mT]
 
+   // printf("%f", B) // Commneted this part since we don't need to print to console at this part.
+
    return B;
+
 }
