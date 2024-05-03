@@ -100,6 +100,50 @@ int project2worldFrame(const int x_in, const int y_in, double* x_out, double* y_
     /* Insert your Code here */
     /* ********************* */
     
+    // Constants
+
+
+    // Load Parameters
+    load_parameters();
+    double u_0 = bbs.distortion_center[0];
+    double v_0 = bbs.distortion_center[1];
+    double focal_length_in_pixel = bbs.focal_length;
+    double k1 = bbs.radial_distortion_coeff[0];
+    double k2 = bbs.radial_distortion_coeff[1];
+    double image_scale = bbs.calibration_image_scale;
+
+
+    double cam_offset[3] = {bbs.cam_offset[0], bbs.cam_offset[1], bbs.cam_offset[2]};
+    double P_z = bbs.plate_height;
+    double ball_radius = bbs.ball_radius;
+
+
+    // Normalize the Pixel Information
+
+    // STEP1: Undistort
+    
+    // Normalize The Pixels
+
+    double u_norm = (x_in * image_scale - u_0) / focal_length_in_pixel;
+    double v_norm = (y_in * image_scale - v_0) / focal_length_in_pixel;
+
+    double r_d = sqrt(pow(u_norm, 2) + pow(v_norm, 2));
+    double r = newtonRaphson(r_d, k1, k2);
+
+    double distortion_coeff_r = 1 + k1*pow(r, 2) + k2*pow(r, 4);
+
+    double u_undistort = u_norm / distortion_coeff_r;
+    double v_undistort = v_norm / distortion_coeff_r;
+
+    // STEP2: Normalized Pixel Frame to Camera Frame
+    double z_c = cam_offset[2] + P_z + ball_radius; // assume change of z_c is neglectable
+    double x_c = u_undistort * z_c;
+    double y_c = v_undistort * z_c;
+
+    // STEP3: Translation into World Frame
+    x_out[0] = -(x_c + cam_offset[0]);
+    y_out[0] = -(y_c + cam_offset[1]);
+    
   return 0;
 };
 

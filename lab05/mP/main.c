@@ -113,11 +113,38 @@ int main(){
   /*Test projection from the image frame to the world frame*/
   if(task_selection == 2){
       
-      //initalize variables:
-      
+    //initalize variables:
+    int flag=0, x=0, y=0;
+    double xout=0.0, yout=0.0;
+
     /* ********************* */
     /* Insert your Code here */
     /* ********************* */
+    int input = 0;
+    int valid = 0;
+
+    while (!valid) {
+      printf("Press [1]Continue, [2]Stop: ");
+      scanf("%d", &input);
+
+      if (input == 1) {
+          readFromPixy(fd, &flag, &x, &y);
+
+        if (flag == 0) {
+          printf("Pixy camera detects nothing\n");
+        }
+        else if (flag == 1) {
+          project2worldFrame(x, y, &xout, &yout);
+          printf("x: %.2f [mm], y: %.2f [mm]\n", xout, yout);
+        }
+      }
+      else if (input == 2) {
+        break;
+      }
+      else {
+        printf("Press the valid input\n");
+      }
+    }
 
    
   }
