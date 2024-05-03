@@ -22,7 +22,7 @@ int load_parameters(){
   bbs.base_angles[2] = (11.0 * M_PI) / 6.0;  // rad
   bbs.ball_radius = 20;
 
-    // Camera Calibration Parameters:
+// Camera Calibration Parameters:
 // **These are dummy parameters and need to be replaced with your calibration**:
 // When pictures are taken in PixyMon, their resolution varies. This factor
 // accounts for this scaling, such that the bbs can be copied directly
