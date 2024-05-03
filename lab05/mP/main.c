@@ -15,7 +15,7 @@ int main(){
   printf("Opening serial port...\n");
 
   // Initialize the serial port
-  const char* port= "/dev/cu.SLAB_USBtoUART";//vm: "/dev/ttyUSB0", mac: "/dev/cu.SLAB_USBtoUART"
+  const char* port= "/dev/cu.usbserial-01E4BC76";//vm: "/dev/ttyUSB0", mac: "/dev/cu.SLAB_USBtoUART"
   int fd = serialport_init(port, 115200);
   if (fd == -1){
       printf("Could not open the port.\n");
@@ -77,25 +77,26 @@ int main(){
 
       // #4 Print the angles
       printf("Plate angles: phi_x=%.2f, theta_y=%.2f\n", plate_angles[0], plate_angles[1]);
-
       printf("Servo angles: a_A=%.2f, a_B=%.2f, a_C=%.2f\n", servo_angles[0], servo_angles[1], servo_angles[2]);
 
       // #5 Ask user whether the process repeats
       int input = 0;
       int valid = 0;
 
-      while (!valid) {
-        printf("Do you want to repeat? [1]yes, [0]no: ");
+      while (valid==0) {
+        printf("Do you want to repeat? [1]yes, [2]no: ");
         scanf("%d", &input);
 
         if (input==1) {
           request = 1;
           valid = 1;
         }
-        else if (input==0) {
+
+        else if (input==2) {
           request = 0;
           valid = 1;
         }
+
         else {
           printf("Input the right values\n");
           valid = 0;

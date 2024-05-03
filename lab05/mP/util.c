@@ -57,25 +57,32 @@ int inverseKinematics(const double* plate_angles, double* servo_angles) {
   /* ********************* */
   
   // Calculate delta_z values
+
+
   double delta_zA = R * sin(phi_x);
-  double delta_zB = (sqrt(3)/2*sin(theta_y) - 1/2*sin(phi_x))*R;
-  double delta_zC = (-sqrt(3)/2*sin(theta_y) - 1/2*sin(phi_x))*R;
-  
+  double delta_zB = (sin(theta_y)*sqrt(3)/2 - 0.5*sin(phi_x))*R;
+  double delta_zC = (-sin(theta_y)*sqrt(3)/2 - 0.5*sin(phi_x))*R;
+
   servo_angles[0] = calculateAlpha(L_1, L_2, delta_zA, P_z) * 180 / M_PI;
   servo_angles[1] = calculateAlpha(L_1, L_2, delta_zB, P_z) * 180 / M_PI;
   servo_angles[2] = calculateAlpha(L_1, L_2, delta_zC, P_z) * 180 / M_PI;
 
+  printf("delta_zA: %.2f, servo_angles: %.2f\n", delta_zA, servo_angles[0]);
+  printf("delta_zB: %.2f, servo_angles: %.2f\n", delta_zB, servo_angles[1]);
+  printf("delta_zC: %.2f, servo_angles: %.2f\n", delta_zC, servo_angles[2]);
+
   // return -1; // if invalid input angle
   // we checked beta > -pi/2 (cannot be folded to perpendicular position with inversed direction)
-  if (servo_angles[0] < 0 || servo_angles[1] < 0 || servo_angles[2] < 0) return -1;
+  if (servo_angles[0] > 90.0 || servo_angles[1] > 90.0 || servo_angles[2] > 90.0) return -1;
   // if ok
   return 0; 
 };
 
 double calculateAlpha(double L_1, double L_2, double delta_z, double P_z) {
-  double numerator = pow(L_2, 2)- (pow(delta_z+P_z, 2) + pow(L_1, 2));
+  double numerator = pow(delta_z + P_z, 2) + pow(L_1, 2) - pow(L_2, 2);
   double denominator = 2*(delta_z + P_z)*L_1;
   double beta = acos(numerator/denominator);
+
   double alpha = M_PI_2 - beta;
   return alpha;
 }
@@ -95,8 +102,6 @@ int project2worldFrame(const int x_in, const int y_in, double* x_out, double* y_
     
   return 0;
 };
-
-
 
 
 /* Sends servo angles to serial port */
