@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="405c2e00-fc23-4667-bcf6-a4dddd068d61" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/.ipynb_checkpoints/camera_calibration-checkpoint.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/camera_calibration.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image18.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image19.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image22.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image23.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image24.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image25.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image26.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image27.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image28.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image29.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image30.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image31.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/camera_calibration/images/image9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/.ipynb_checkpoints/Untitled-checkpoint.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/bbs_main.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/feather_serial.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/feather_serial.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/feather_serial.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/invkin.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/libinvkin.a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/main.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/main.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/newton_raphson.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/newton_raphson.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/newton_raphson.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/parameters.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/parameters.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/util.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/util.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05/mP/util.o" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="2gPOEWuJsUy09YzhGXfmXZ0x9ZX" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/Users/mireflare/Documents/Codes/git-irm",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241" />
+        <option value="bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="405c2e00-fc23-4667-bcf6-a4dddd068d61" name="Changes" comment="" />
+      <created>1715595635684</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1715595635684</updated>
+      <workItem from="1715595637537" duration="21000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
