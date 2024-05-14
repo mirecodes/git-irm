@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include "util.h"
 
-int main(){
+int main()
+{
   //////////////////////////////
   /////// Initialization ///////
   //////////////////////////////
 
-  //Print Welcome Message
+  // Print Welcome Message
   printf("\e[1;1H\e[2J"); // Clear screen
   printf("#####################\n");
   printf("Ball and Plate System\n");
@@ -15,13 +16,14 @@ int main(){
   printf("Opening serial port...\n");
 
   // Initialize the serial port
-  const char* port= "/dev/cu.usbserial-01E4BC76";//vm: "/dev/ttyUSB0", mac: "/dev/cu.SLAB_USBtoUART"
+  const char *port = "/dev/cu.usbserial-01E4BAD5"; // vm: "/dev/ttyUSB0", mac: "/dev/cu.SLAB_USBtoUART"
   int fd = serialport_init(port, 115200);
-  if (fd == -1){
-      printf("Could not open the port.\n");
-      printf(" - Is the Arduino IDE terminal opened?\n");
-      printf(" - Is the device connected to the VM?\n");
-      return -1;    
+  if (fd == -1)
+  {
+    printf("Could not open the port.\n");
+    printf(" - Is the Arduino IDE terminal opened?\n");
+    printf(" - Is the device connected to the VM?\n");
+    return -1;
   }
 
   // Initialize robot and check
@@ -29,7 +31,7 @@ int main(){
   initBallBalancingRobot(fd);
 
   // Make sure that serial port is relaxed
-  usleep(20*1000);
+  usleep(20 * 1000);
 
   // Parameter loading functions
   load_parameters();
@@ -46,20 +48,22 @@ int main(){
   /////////// Task 1 ///////////
   //////////////////////////////
 
-  if(task_selection == 1){
+  if (task_selection == 1)
+  {
     /* Test inverse kinematics via
     terminal */
-      
-    //initalize variables:
-    double plate_angles[] = {0,0};
-    double servo_angles[] = {0,0,0};
-     
+
+    // initalize variables:
+    double plate_angles[] = {0, 0};
+    double servo_angles[] = {0, 0, 0};
+
     /* ********************* */
     /* Insert your Code here */
     /* ********************* */
 
     int request = 1;
-    while (request) {
+    while (request)
+    {
       // #1 Get the angles from user
       printf("Input your angles in degree [phy_x] [theta_y]: ");
       scanf("%lf %lf", &plate_angles[0], &plate_angles[1]);
@@ -68,10 +72,12 @@ int main(){
       int res = inverseKinematics(plate_angles, servo_angles);
 
       // #3 Send the command to the servos
-      if (res==-1) { // servo angles are not feasible
+      if (res == -1)
+      { // servo angles are not feasible
         printf("Servo angles are not feasible\n");
       }
-      else {         // servo angles are feasible
+      else
+      { // servo angles are feasible
         servoCommand(fd, servo_angles);
       }
 
@@ -83,39 +89,42 @@ int main(){
       int input = 0;
       int valid = 0;
 
-      while (valid==0) {
+      while (valid == 0)
+      {
         printf("Do you want to repeat? [1]yes, [2]no: ");
         scanf("%d", &input);
 
-        if (input==1) {
+        if (input == 1)
+        {
           request = 1;
           valid = 1;
         }
 
-        else if (input==2) {
+        else if (input == 2)
+        {
           request = 0;
           valid = 1;
         }
 
-        else {
+        else
+        {
           printf("Input the right values\n");
           valid = 0;
         }
       }
-
     }
-
   }
 
   //////////////////////////////
   /////////// Task 2 ///////////
   //////////////////////////////
   /*Test projection from the image frame to the world frame*/
-  if(task_selection == 2){
-      
-    //initalize variables:
-    int flag=0, x=0, y=0;
-    double xout=0.0, yout=0.0;
+  if (task_selection == 2)
+  {
+
+    // initalize variables:
+    int flag = 0, x = 0, y = 0;
+    double xout = 0.0, yout = 0.0;
 
     /* ********************* */
     /* Insert your Code here */
@@ -123,32 +132,35 @@ int main(){
     int input = 0;
     int valid = 0;
 
-    while (!valid) {
+    while (!valid)
+    {
       printf("Press [1]Continue, [2]Stop: ");
       scanf("%d", &input);
 
-      if (input == 1) {
-          readFromPixy(fd, &flag, &x, &y);
+      if (input == 1)
+      {
+        readFromPixy(fd, &flag, &x, &y);
 
-        if (flag == 0) {
+        if (flag == 0)
+        {
           printf("Pixy camera detects nothing\n");
         }
-        else if (flag == 1) {
+        else if (flag == 1)
+        {
           project2worldFrame(x, y, &xout, &yout);
           printf("x: %.2f [mm], y: %.2f [mm]\n", xout, yout);
         }
       }
-      else if (input == 2) {
+      else if (input == 2)
+      {
         break;
       }
-      else {
+      else
+      {
         printf("Press the valid input\n");
       }
     }
-
-   
   }
-
 
   return 0;
 }
