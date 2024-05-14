@@ -69,6 +69,54 @@ int main()
     /* ********************* */
     /* Insert your Code here (From Lab 05)*/
     /* ********************* */
+        /* Test inverse kinematics via
+    terminal */
+
+    int request = 1;
+    while (request) {
+      // #1 Get the angles from user
+      printf("Input your angles in degree [phy_x] [theta_y]: ");
+      scanf("%lf %lf", &plate_angles[0], &plate_angles[1]);
+
+      // #2 Compute the servo angles
+      int res = inverseKinematics(plate_angles, servo_angles);
+
+      // #3 Send the command to the servos
+      if (res==-1) { // servo angles are not feasible
+        printf("Servo angles are not feasible\n");
+      }
+      else {         // servo angles are feasible
+        servoCommand(fd, servo_angles);
+      }
+
+      // #4 Print the angles
+      printf("Plate angles: phi_x=%.2f, theta_y=%.2f\n", plate_angles[0], plate_angles[1]);
+      printf("Servo angles: a_A=%.2f, a_B=%.2f, a_C=%.2f\n", servo_angles[0], servo_angles[1], servo_angles[2]);
+
+      // #5 Ask user whether the process repeats
+      int input = 0;
+      int valid = 0;
+
+      while (valid==0) {
+        printf("Do you want to repeat? [1]yes, [2]no: ");
+        scanf("%d", &input);
+
+        if (input==1) {
+          request = 1;
+          valid = 1;
+        }
+
+        else if (input==2) {
+          request = 0;
+          valid = 1;
+        }
+
+        else {
+          printf("Input the right values\n");
+          valid = 0;
+        }
+      }
+
   }
 
   //////////////////////////////
@@ -82,6 +130,39 @@ int main()
     /* ********************* */
     /* Insert your Code here (From Lab 05) */
     /* ********************* */
+
+        //initalize variables:
+    int flag=0, x=0, y=0;
+    double xout=0.0, yout=0.0;
+
+    /* ********************* */
+    /* Insert your Code here */
+    /* ********************* */
+    int input = 0;
+    int valid = 0;
+
+    while (!valid) {
+      printf("Press [1]Continue, [2]Stop: ");
+      scanf("%d", &input);
+
+      if (input == 1) {
+          readFromPixy(fd, &flag, &x, &y);
+
+        if (flag == 0) {
+          printf("Pixy camera detects nothing\n");
+        }
+        else if (flag == 1) {
+          project2worldFrame(x, y, &xout, &yout);
+          printf("x: %.2f [mm], y: %.2f [mm]\n", xout, yout);
+        }
+      }
+      else if (input == 2) {
+        break;
+      }
+      else {
+        printf("Press the valid input\n");
+      }
+    }
   }
 
   //////////////////////////////
@@ -97,13 +178,31 @@ int main()
     double k_i = 0;
 
     // TODO: Intialize filter window size
-    int n_pos = 0;
-    int n_vel = 0;
+    int n_pos = 5;
+    int n_vel = 10;
 
     // TODO: Ask for user input to change PID parameters
     /* ********************* */
     /* Insert your Code here */
     /* ********************* */
+
+    int valid = 0;
+    int choice = 0;
+    while (!valid) {
+      printf("Do you wish to use the default PID parameters or set your own? (0 for default, 1 for own): ");
+      scanf("%d", &choice);
+      if (choice == 0) {
+        valid = 1;
+      }
+      else if (choice == 1) {
+        printf("Please insert your PID parameters: (k_p) (k_d) (k_i)");
+        scanf("%f %f %f", &k_p, &k_d, &k_i);
+        valid = 1;
+      }
+      else {
+        printf("Type the correct input\n");
+      }
+    }
 
     // Variables for Pixy2
     int flag = 0;      // flag that detects if the pixy cam can detect a ball
@@ -115,6 +214,8 @@ int main()
     double y_filt = 0; // filtered y coordinate in plate frame and mm
     double vel_x = 0;  // x velocity calculated from filtered position
     double vel_y = 0;  // y velocity calculated from filtered position
+    double vel_x_filt = 0; // filtered vel_x coordinate in plate frame and mm
+    double vel_y_filt = 0; // filtered vel_y coordinate in plate frame and mm
 
     // read pixy a couple of times to clear buffer
     for (int i = 0; i < 20; i++)
@@ -185,34 +286,61 @@ int main()
       /* ********************* */
 
       // TODO: Get current sampling time dt
+      end = start;
+      start = getMicroseconds();
+      current_time = (float)getMicroseconds()/1000;
+      if (start != t0) {
+        dt = (float)(start - end)/1000;
+      }
 
       // TODO: Get the coordinates of the ball in the Pixy Camera frame (Use a function in util.c)
+      readFromPixy(fd, &flag, &x_px, &y_px);
 
       // If the ball is detected, enter if-bracket
       if (flag)
       {
         // TODO: Use camera calibration form Lab05
-
+        cameraCalibration(x_px, y_px, &x_cal, &y_cal);
         // TODO: Place measurements in buffer array
         // Hint: There is a function called pushBack
         //  in util.h that you can use here.
+        pushBack(x_cal, &x_raw, buf_size);
+        pushBack(y_cal, &y_raw, buf_size);
 
         // TODO: Apply filter to position coordinates
+        x_filt = movingAverage(n_pos, &x_raw);
+        y_filt = movingAverage(n_pos, &y_raw);
+        pushBack(x_filt, &x, buf_size);
+        pushBack(y_filt, &y, buf_size);
 
         // TODO: Compute velocity based on the filtered position signal
+        vel_x = discreteDerivative(dt, x);
+        vel_y = discreteDerivative(dt, y);
 
         // TODO: Place velocity in buffer array (use pushBack function)
+        pushBack(vel_x, &vx_raw, buf_size);
+        pushBack(vel_y, &vy_raw, buf_size);
 
         // TODO: Apply filter to velocity
+        vel_x_filt = movingAverage(n_vel, vx_raw);
+        vel_y_filt = movingAverage(n_vel, vy_raw);
+        pushBack(vel_x_filt, vx, buf_size);
+        pushBack(vel_y_filt, vy, buf_size);
 
         // TODO: Set reference depending on task
         switch (task_selection)
         {
         case 4: /*TODO: Postlab Q4 centering task */
+          x_ref = 0;
+          y_ref = 0;
+          vx_ref = 0;
+          vy_ref = 0;
           break;
         case 5: /*TODO: Postlab Q5 step response reference  --> use function in util.h */
+
           break;
         case 6: /*TODO: Postlab Q6 circular trajectory reference --> implement & use function in util.h */
+
           break;
         }
 
