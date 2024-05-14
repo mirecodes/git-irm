@@ -1,9 +1,11 @@
 #include "util.h"
+#include "newton_raphson.h"
 
-int inverseKinematics(const double* plate_angles, double* servo_angles) {
+int inverseKinematics(const double *plate_angles, double *servo_angles)
+{
   // Load parameters R, L_1, L_2, P_z etc. from parameters file. Example: double R = bbs.R_plate_joint;
   // Then implement inverse kinematics similar to prelab
-  
+
   load_parameters();
   double R = bbs.R_plate_joint;
   double L_1 = bbs.l1;
@@ -16,13 +18,11 @@ int inverseKinematics(const double* plate_angles, double* servo_angles) {
   /* ********************* */
   /* Insert your Code here */
   /* ********************* */
-  
+
   // Calculate delta_z values
-
-
   double delta_zA = R * sin(phi_x);
-  double delta_zB = (sin(theta_y)*sqrt(3)/2 - 0.5*sin(phi_x))*R;
-  double delta_zC = (-sin(theta_y)*sqrt(3)/2 - 0.5*sin(phi_x))*R;
+  double delta_zB = (sin(theta_y) * sqrt(3) / 2 - 0.5 * sin(phi_x)) * R;
+  double delta_zC = (-sin(theta_y) * sqrt(3) / 2 - 0.5 * sin(phi_x)) * R;
 
   servo_angles[0] = calculateAlpha(L_1, L_2, delta_zA, P_z) * 180 / M_PI;
   servo_angles[1] = calculateAlpha(L_1, L_2, delta_zB, P_z) * 180 / M_PI;
@@ -34,74 +34,68 @@ int inverseKinematics(const double* plate_angles, double* servo_angles) {
 
   // return -1; // if invalid input angle
   // we checked beta > -pi/2 (cannot be folded to perpendicular position with inversed direction)
-  if (servo_angles[0] > 90.0 || servo_angles[1] > 90.0 || servo_angles[2] > 90.0) return -1;
+  if (servo_angles[0] > 90.0 || servo_angles[1] > 90.0 || servo_angles[2] > 90.0)
+    return -1;
   // if ok
-  return 0; 
+  return 0;
 };
 
-double calculateAlpha(double L_1, double L_2, double delta_z, double P_z) {
+double calculateAlpha(double L_1, double L_2, double delta_z, double P_z)
+{
   double numerator = pow(delta_z + P_z, 2) + pow(L_1, 2) - pow(L_2, 2);
-  double denominator = 2*(delta_z + P_z)*L_1;
-  double beta = acos(numerator/denominator);
+  double denominator = 2 * (delta_z + P_z) * L_1;
+  double beta = acos(numerator / denominator);
 
   double alpha = M_PI_2 - beta;
   return alpha;
 }
 
-int project2worldFrame(const int x_in, const int y_in, double* x_out, double* y_out){
+int project2worldFrame(const int x_in, const int y_in, double *x_out, double *y_out)
+{
 
-    // implement the code to project the coordinates in the image frame to the world frame
-    // make sure to multiply the raw pixy2 coordinates with the scaling factor (ratio between
-    // image fed to python for calibration and pixy2 resolution): bbs.calibration_image_scale.
-    
-    /* ********************* */
-    /* Insert your Code here */
-    /* ********************* */
-    
-    // Constants
+  // implement the code to project the coordinates in the image frame to the world frame
+  // make sure to multiply the raw pixy2 coordinates with the scaling factor (ratio between
+  // image fed to python for calibration and pixy2 resolution): bbs.calibration_image_scale.
 
+  /* ********************* */
+  /* Insert your Code here */
+  /* ********************* */
 
-    // Load Parameters
-    load_parameters();
-    double u_0 = bbs.distortion_center[0];
-    double v_0 = bbs.distortion_center[1];
-    double focal_length_in_pixel = bbs.focal_length;
-    double k1 = bbs.radial_distortion_coeff[0];
-    double k2 = bbs.radial_distortion_coeff[1];
-    double image_scale = bbs.calibration_image_scale;
+  // Load Parameters
+  load_parameters();
+  double u_0 = bbs.distortion_center[0];
+  double v_0 = bbs.distortion_center[1];
+  double focal_length_in_pixel = bbs.focal_length;
+  double k1 = bbs.radial_distortion_coeff[0];
+  double k2 = bbs.radial_distortion_coeff[1];
+  double image_scale = bbs.calibration_image_scale;
 
+  double cam_offset[3] = {bbs.cam_offset[0], bbs.cam_offset[1], bbs.cam_offset[2]};
+  double P_z = bbs.plate_height;
+  double ball_radius = bbs.ball_radius;
 
-    double cam_offset[3] = {bbs.cam_offset[0], bbs.cam_offset[1], bbs.cam_offset[2]};
-    double P_z = bbs.plate_height;
-    double ball_radius = bbs.ball_radius;
+  // STEP1: Undistort
+  // Normalize The Pixels
+  double u_norm = (x_in * image_scale - u_0) / focal_length_in_pixel;
+  double v_norm = (y_in * image_scale - v_0) / focal_length_in_pixel;
 
+  double r_d = sqrt(pow(u_norm, 2) + pow(v_norm, 2));
+  double r = newtonRaphson(r_d, k1, k2);
 
-    // Normalize the Pixel Information
+  double distortion_coeff_r = 1 + k1 * pow(r, 2) + k2 * pow(r, 4);
 
-    // STEP1: Undistort
-    
-    // Normalize The Pixels
+  double u_undistort = u_norm / distortion_coeff_r;
+  double v_undistort = v_norm / distortion_coeff_r;
 
-    double u_norm = (x_in * image_scale - u_0) / focal_length_in_pixel;
-    double v_norm = (y_in * image_scale - v_0) / focal_length_in_pixel;
+  // STEP2: Normalized Pixel Frame to Camera Frame
+  double z_c = cam_offset[2] + P_z + ball_radius; // assume change of z_c is neglectable
+  double x_c = u_undistort * z_c;
+  double y_c = v_undistort * z_c;
 
-    double r_d = sqrt(pow(u_norm, 2) + pow(v_norm, 2));
-    double r = newtonRaphson(r_d, k1, k2);
+  // STEP3: Translation into World Frame
+  x_out[0] = -(x_c + cam_offset[0]);
+  y_out[0] = -(y_c + cam_offset[1]);
 
-    double distortion_coeff_r = 1 + k1*pow(r, 2) + k2*pow(r, 4);
-
-    double u_undistort = u_norm / distortion_coeff_r;
-    double v_undistort = v_norm / distortion_coeff_r;
-
-    // STEP2: Normalized Pixel Frame to Camera Frame
-    double z_c = cam_offset[2] + P_z + ball_radius; // assume change of z_c is neglectable
-    double x_c = u_undistort * z_c;
-    double y_c = v_undistort * z_c;
-
-    // STEP3: Translation into World Frame
-    x_out[0] = -(x_c + cam_offset[0]);
-    y_out[0] = -(y_c + cam_offset[1]);
-    
   return 0;
 };
 
@@ -124,7 +118,7 @@ double discreteDerivative(const double dt, const double *x)
   /* Insert your Code here */
   /* ********************* */
 
-  double vel = (x[0] - x[1])/dt;
+  double vel = (x[0] - x[1]) / dt;
   return vel;
 };
 
@@ -136,7 +130,8 @@ double movingAverage(const int n, const double *x)
   /* ********************* */
 
   double sum = 0;
-  for (int i=0; i<n; i++) {
+  for (int i = 0; i < n; i++)
+  {
     sum += x[i];
   }
 
@@ -189,6 +184,24 @@ int circularTrajectory(const double current_time, double *x_ref, double *y_ref,
   /* ********************* */
   /* Insert your Code here */
   /* ********************* */
+  double t = current_time - traj_start;
+  double ang = (t / period) * 2 * M_PI;
+  double ang_vel = ang / period;
+
+  if (t > traj_start && t < num_of_traj * period)
+  {
+    *x_ref = R;
+    *y_ref = 0;
+    *vx_ref = 0;
+    *vx_ref = 0;
+  }
+  else
+  {
+    *x_ref = R * sin(ang);
+    *y_ref = R * cos(ang);
+    *vx_ref = R * ang_vel * (-sin(ang));
+    *vy_ref = R * ang_vel * cos(ang);
+  }
 
   return 0;
 };

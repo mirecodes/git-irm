@@ -4,7 +4,8 @@
 #include <assert.h>
 #include "invkin.h"
 #include "feather_serial.h"
-#define M_PI 3.14159265358979323846
+
+// #define M_PI 3.14159265358979323846
 
 /* Parameter structs: two new types are defined which
    will be used to access calibration parameters. The
@@ -55,7 +56,11 @@ int load_parameters();
 /*Loads parameters related to the servomotors used */
 int load_servo();
 
+int project2worldFrame(const int x_in, const int y_in, double *x_out, double *y_out);
+
 int inverseKinematics(const double *plate_angles, double *servo_angles);
+
+double calculateAlpha(double L_1, double L_2, double delta_z, double P_z);
 
 int cameraCalibration(const int x_in, const int y_in, double *x_out, double *y_out);
 
