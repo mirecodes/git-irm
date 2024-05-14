@@ -107,7 +107,13 @@ double discreteDerivative(const double dt, const double *x)
   /* Insert your Code here */
   /* ********************* */
 
-  double vel = (x[0] - x[1]) / dt;
+  double vel = 0;
+
+  if (dt != 0)
+  {
+    vel = (x[0] - x[1]) / dt;
+  }
+
   return vel;
 };
 
@@ -173,11 +179,10 @@ int circularTrajectory(const double current_time, double *x_ref, double *y_ref,
   /* ********************* */
   /* Insert your Code here */
   /* ********************* */
-  double t = current_time - traj_start;
-  double ang = (t / period) * 2 * M_PI;
+  double ang = ((current_time - traj_start) / period) * 2 * M_PI;
   double ang_vel = ang / period;
 
-  if (t > traj_start && t < num_of_traj * period)
+  if (current_time < traj_start) // if (t > traj_start && t < num_of_traj * period)
   {
     *x_ref = R;
     *y_ref = 0;
@@ -422,7 +427,7 @@ int logger(FILE *fp,
 
   fprintf(
       fp,
-      "%lu %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n",
+      "%ld %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n",
       end_time, x_ref, y_ref, vx_ref, vy_ref, x_raw, y_raw, x, y, vx_raw,
       vy_raw, vx, vy);
   fclose(fp);
