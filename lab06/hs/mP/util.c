@@ -24,9 +24,9 @@ int inverseKinematics(const double *plate_angles, double *servo_angles)
   double delta_zB = (sin(theta_y) * sqrt(3) / 2 - 0.5 * sin(phi_x)) * R;
   double delta_zC = (-sin(theta_y) * sqrt(3) / 2 - 0.5 * sin(phi_x)) * R;
 
-  servo_angles[0] = calculateAlpha(L_1, L_2, delta_zA, P_z) * 180 / M_PI;
-  servo_angles[1] = calculateAlpha(L_1, L_2, delta_zB, P_z) * 180 / M_PI;
-  servo_angles[2] = calculateAlpha(L_1, L_2, delta_zC, P_z) * 180 / M_PI;
+  servo_angles[0] = calculateAlpha(L_1, L_2, delta_zA, P_z) * 180 / M_PI + servo.bias_A;
+  servo_angles[1] = calculateAlpha(L_1, L_2, delta_zB, P_z) * 180 / M_PI + servo.bias_B;
+  servo_angles[2] = calculateAlpha(L_1, L_2, delta_zC, P_z) * 180 / M_PI + servo.bias_C;
 
   printf("delta_zA: %.2f, servo_angles: %.2f\n", delta_zA, servo_angles[0]);
   printf("delta_zB: %.2f, servo_angles: %.2f\n", delta_zB, servo_angles[1]);
@@ -93,8 +93,8 @@ int project2worldFrame(const int x_in, const int y_in, double *x_out, double *y_
   double y_c = v_undistort * z_c;
 
   // STEP3: Translation into World Frame
-  x_out[0] = -(x_c + cam_offset[0]);
-  y_out[0] = -(y_c + cam_offset[1]);
+  x_out[0] = -x_c + cam_offset[0];
+  y_out[0] = -y_c + cam_offset[1];
 
   return 0;
 };

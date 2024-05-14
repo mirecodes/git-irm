@@ -28,16 +28,16 @@ int load_parameters()
   //////////////////
   //// Gurten //////
   //////////////////
-  bbs.calibration_image_scale = 3.74;
-  bbs.focal_length = 495;
-  bbs.radial_distortion_coeff[0] = -0.3298;
-  bbs.radial_distortion_coeff[1] = 0.1583;
-  bbs.distortion_center[0] = 595;
-  bbs.distortion_center[1] = 429;
+  bbs.calibration_image_scale = 3.62;
+  bbs.focal_length = 466.4;
+  bbs.radial_distortion_coeff[0] = -0.2530;
+  bbs.radial_distortion_coeff[1] = 0.0593;
+  bbs.distortion_center[0] = 572.4;
+  bbs.distortion_center[1] = 383.3;
 
   // Adjust these if lens is removed and reinserted
-  bbs.cam_offset[0] = 4;
-  bbs.cam_offset[1] = 7;
+  bbs.cam_offset[0] = 8;
+  bbs.cam_offset[1] = 8;
   bbs.cam_offset[2] = 28.1;
 
   return 1;
@@ -59,7 +59,7 @@ int load_servo()
   //////////////////
   servo.bias_A = -3;
   servo.bias_B = 0;
-  servo.bias_C = 0;
+  servo.bias_C = 2;
 
   //////////////////
   ////  Rigi  //////
