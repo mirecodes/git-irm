@@ -1,5 +1,13 @@
 {
 	"files.associations": {
-		"newton_raphson.h": "c"
+		"newton_raphson.h": "c",
+		"__bit_reference": "c",
+		"__split_buffer": "c",
+		"array": "c",
+		"initializer_list": "c",
+		"ios": "c",
+		"string": "c",
+		"string_view": "c",
+		"vector": "c"
 	}
 }

@@ -185,9 +185,9 @@ int main()
   {
 
     // TODO: Initialize default PID parameters
-    double k_p = 0.03;
-    double k_d = 0;
-    double k_i = 0;
+    double k_p = 0.15;
+    double k_d = 0.06;
+    double k_i = 0.04;
 
     // TODO: Intialize filter window size
     int n_pos = 5;
@@ -210,7 +210,7 @@ int main()
       }
       else if (choice == 1)
       {
-        printf("Please insert your PID parameters: (k_p) (k_d) (k_i)");
+        printf("Please insert your PID parameters (k_p) (k_d) (k_i): ");
         scanf("%lf %lf %lf", &k_p, &k_d, &k_i);
         valid = 1;
       }
@@ -307,11 +307,11 @@ int main()
 
       // TODO: Get current sampling time dt
       end = start;
-      start = getMicroseconds();
-      current_time = (float)start / 1000000;
+      start = getMicroseconds() - t0;
+      current_time = start / 1000000.0;
       if (start != t0)
       {
-        dt = (float)(start - end) / 1000000;
+        dt = (start - end) / 1000000.0;
       }
 
       // TODO: Get the coordinates of the ball in the Pixy Camera frame (Use a function in util.c)
