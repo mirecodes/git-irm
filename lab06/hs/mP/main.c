@@ -162,7 +162,7 @@ int main()
         }
         else if (flag == 1)
         {
-          project2worldFrame(x, y, &xout, &yout);
+          cameraCalibration(x, y, &xout, &yout);
           printf("x: %.2f [mm], y: %.2f [mm]\n", xout, yout);
         }
       }
@@ -388,11 +388,12 @@ int main()
         u_y = k_p * u_p_y + k_i * y_integ + k_d * u_d_y;
 
         // TODO: Define Plate angles from PID output (watch out for correct sign)
-        plate_angles[0] = u_y * 180 / M_PI;
-        plate_angles[1] = u_x * 180 / M_PI;
+        plate_angles[0] = -u_y; // u_y * 180 / M_PI
+        plate_angles[1] = u_x;  // u_x * 180 / M_PI
 
         // TODO: Compute servo angles and send command
         inverseKinematics(plate_angles, servo_angles);
+        servoCommand(fd, servo_angles);
 
         // Open logging file and log everything to textfile
         fp = fopen(datetime, "a");

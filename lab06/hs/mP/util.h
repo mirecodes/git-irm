@@ -56,8 +56,6 @@ int load_parameters();
 /*Loads parameters related to the servomotors used */
 int load_servo();
 
-int project2worldFrame(const int x_in, const int y_in, double *x_out, double *y_out);
-
 int inverseKinematics(const double *plate_angles, double *servo_angles);
 
 double calculateAlpha(double L_1, double L_2, double delta_z, double P_z);

@@ -50,7 +50,7 @@ double calculateAlpha(double L_1, double L_2, double delta_z, double P_z)
   return alpha;
 }
 
-int project2worldFrame(const int x_in, const int y_in, double *x_out, double *y_out)
+int cameraCalibration(const int x_in, const int y_in, double *x_out, double *y_out)
 {
 
   // implement the code to project the coordinates in the image frame to the world frame
@@ -95,17 +95,6 @@ int project2worldFrame(const int x_in, const int y_in, double *x_out, double *y_
   // STEP3: Translation into World Frame
   x_out[0] = -x_c + cam_offset[0];
   y_out[0] = -y_c + cam_offset[1];
-
-  return 0;
-};
-
-int cameraCalibration(const int x_in, const int y_in, double *x_out, double *y_out)
-{
-  // TODO: copy + paste your previous work
-
-  /* ********************* */
-  /* Insert your Code here */
-  /* ********************* */
 
   return 0;
 };

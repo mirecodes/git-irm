@@ -102,8 +102,6 @@ int project2worldFrame(const int x_in, const int y_in, double *x_out, double *y_
   /* Insert your Code here */
   /* ********************* */
 
-  // Constants
-
   // Load Parameters
   load_parameters();
   double u_0 = bbs.distortion_center[0];
@@ -120,17 +118,12 @@ int project2worldFrame(const int x_in, const int y_in, double *x_out, double *y_
   // Normalize the Pixel Information
 
   // STEP1: Undistort
-
   // Normalize The Pixels
-
   double u_norm = (x_in * image_scale - u_0) / focal_length_in_pixel;
   double v_norm = (y_in * image_scale - v_0) / focal_length_in_pixel;
-
   double r_d = sqrt(pow(u_norm, 2) + pow(v_norm, 2));
   double r = newtonRaphson(r_d, k1, k2);
-
   double distortion_coeff_r = 1 + k1 * pow(r, 2) + k2 * pow(r, 4);
-
   double u_undistort = u_norm / distortion_coeff_r;
   double v_undistort = v_norm / distortion_coeff_r;
 
