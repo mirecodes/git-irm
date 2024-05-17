@@ -25,7 +25,7 @@ int main()
   printf("Opening serial port...\n");
 
   // Initialize the serial port
-  const char *port = "/dev/cu.usbserial-01E4BAD5";
+  const char *port = "/dev/cu.usbserial-01E4BC76";
   int fd = serialport_init(port, 115200);
   if (fd == -1)
   {
@@ -345,6 +345,8 @@ int main()
         // TODO: Apply filter to velocity
         vel_x_filt = movingAverage(n_vel, vx_raw);
         vel_y_filt = movingAverage(n_vel, vy_raw);
+        // vel_x_filt = butterWorth(vx_raw, vx);
+        // vel_y_filt = butterWorth(vy_raw, vy);
         pushBack(vel_x_filt, vx, buf_size);
         pushBack(vel_y_filt, vy, buf_size);
 

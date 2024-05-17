@@ -36,8 +36,8 @@ int load_parameters()
   bbs.distortion_center[1] = 383.3;
 
   // Adjust these if lens is removed and reinserted
-  bbs.cam_offset[0] = 8;
-  bbs.cam_offset[1] = 8;
+  bbs.cam_offset[0] = 2; // 2
+  bbs.cam_offset[1] = 2; // 3
   bbs.cam_offset[2] = 28.1;
 
   return 1;
@@ -59,7 +59,7 @@ int load_servo()
   //////////////////
   servo.bias_A = -3;
   servo.bias_B = 0;
-  servo.bias_C = 2;
+  servo.bias_C = 4;
 
   //////////////////
   ////  Rigi  //////

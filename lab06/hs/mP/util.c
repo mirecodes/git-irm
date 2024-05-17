@@ -139,7 +139,12 @@ double butterWorth(const double *x, const double *y)
   /* ********************* */
   /* Insert your Code here */
   /* ********************* */
-  return 0;
+
+  double b[3] = {0.1744e-4, 0.3489e-4, 0.1744e-4};
+  double a[3] = {1, -1.9882, 0.9882};
+
+  double output = -(a[1] * y[0] + a[2] * y[1]) + (b[0] * x[0] + b[1] * x[1] + b[2] * x[2]);
+  return output;
 };
 
 int stepResponse(const double current_time, double *x_ref, double *y_ref,
@@ -180,11 +185,11 @@ int circularTrajectory(const double current_time, double *x_ref, double *y_ref,
   /* Insert your Code here */
   /* ********************* */
   double ang = ((current_time - traj_start) / period) * 2 * M_PI;
-  double ang_vel = ang / period;
+  double ang_vel = 2 * M_PI / period;
 
-  if (current_time < traj_start) // if (t > traj_start && t < num_of_traj * period)
+  if (current_time - traj_start < 0 || current_time - traj_start > num_of_traj * period) // if (t > traj_start && t < num_of_traj * period)
   {
-    *x_ref = R;
+    *x_ref = 0;
     *y_ref = 0;
     *vx_ref = 0;
     *vx_ref = 0;
@@ -193,8 +198,8 @@ int circularTrajectory(const double current_time, double *x_ref, double *y_ref,
   {
     *x_ref = R * sin(ang);
     *y_ref = R * cos(ang);
-    *vx_ref = R * ang_vel * (-sin(ang));
-    *vy_ref = R * ang_vel * cos(ang);
+    *vx_ref = R * ang_vel * (cos(ang));
+    *vy_ref = R * ang_vel * (-sin(ang));
   }
 
   return 0;
